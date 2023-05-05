@@ -1,9 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <set> 
-#define first f
-#define second s
+#include <set>
+ 
+#define f first
+#define s second	
 using namespace std;
 
 struct dados
@@ -25,7 +26,6 @@ int main ()
 	disci.open("Disciplina.csv",fstream::out);
 	aluno.open("Alunos.csv",fstream::out);
 	mat.open("Mattriculas.csv",fstream::out);
-	;
 	arq.open("CMP-2.txt");
 	if(arq.is_open())
 	{
@@ -46,18 +46,16 @@ int main ()
 				D1.matricula=linha.substr(4,15);
 				D1.nome=linha.substr(27,56);
 			}
-			codDisci.insert.f(D1.codDisci);	
-			codDisci.insert.s(D1.nomeDisci);
-			alunos.insert.f(D1.matricula);
-			alunos.insert.s(D1.nome);
+			codDisci.insert({D1.codDisci,D1.nomeDisci});	
+			alunos.insert({D1.matricula,D1.nome});
 			
 			for(it=codDisci.begin();it!=codDisci.end();it++)
 			{
-				disci<<*it.f<<";"<<*it.s<<";\n";
+				disci<<(*it).f<<";"<<(*it).s<<";\n";
 			}
 			for(it=alunos.begin();it!=alunos.end();it++)
 			{
-				alunos<<*it.f<<";"<<*it.s<<";\n";	
+				aluno<<(*it).f<<";"<<(*it).s<<";\n";	
 			}	
 			mat<<D1.matricula<<";"<<D1.codDisci<<";"<<D1.turma<<";\n";	
 		}
