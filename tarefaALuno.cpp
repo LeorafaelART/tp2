@@ -38,20 +38,6 @@ int menu()
 	return op;
 }
 
-bool incluirAluno(Aluno* p)
-{
-	fstream arq;
-	arq.open("alunos.csv");
-	if(buscarAluno(p-matricula)==NULL)
-	{
-		arq<<p->matricula;
-		arq<<p->nome;
-		arq<<endl;
-		return true;		
-	}	
-	return false;
-}
-
 Aluno* buscarAluno(string mat)
 {
 	fstream arq;
@@ -59,20 +45,38 @@ Aluno* buscarAluno(string mat)
 	arq.open("alunos.csv");
 	if(arq.is_open())
 	{
-		getline(arq,linha);
-		aux=linha.substr(0,14);
-		aux2=linha.substr(15,40);
-		if(mat==aux)
+		while(!arq.eof())
 		{
-			Aluno A;
-			A.setMatricula(mat);
-			A.setNome(nome);
-			return A;
-		}
-
-
+			getline(arq,linha);
+			aux=linha.substr(0,15);
+			aux2=linha.substr(16,40);
+			if(mat==aux)
+			{
+				Aluno *A=new Aluno;
+				A->setMatricula(aux);
+				A->setNome(aux2);
+				arq.close();
+				return A;
+			}
+		}	
 	}
+	arq.close();
 	return NULL;
+}
+
+
+bool incluirAluno(Aluno* p)
+{
+	fstream arq;
+	arq.open("alunos.csv");
+	if(buscarAluno(p->getMatricula())==NULL)
+	{
+		arq<<p->getMatricula();
+		arq<<p->getNome();
+		arq<<endl;
+		return true;		
+	}	
+	return false;
 }
 
 int main()
@@ -80,8 +84,6 @@ int main()
 	int opcao;
 	string nome, matricula;
 	Aluno *pAluno=NULL;
-	vector<Aluno*> vetor;
-	cin.ignore();
 	opcao=menu();
 	while(opcao!=0)
 	{
@@ -93,6 +95,8 @@ int main()
 				cin>>matricula;
 				cout<<"Digite o nome do aluno:";
 				getline(cin, nome);
+				cin.ignore();
+				cout<<'\n';
 				pAluno->setMatricula(matricula);
 				pAluno->setNome(nome);
 				//Criar uma função bool incluirAluno(Aluno* p)
@@ -103,19 +107,25 @@ int main()
 				pAluno=NULL;
 				break;
 
-
-
 			case 2://Consultar Aluno
 				cout<<"Digite a matrícula do Aluno:";
 				cin>>matricula;
 				//Criar uma função Aluno* buscarAluno(string mat)
 				pAluno = buscarAluno(matricula);
 				if (pAluno!=NULL)
-					cout<<"dados do aluno"<<endl;
+				{
+					cout<<"Matricula: "<<pAluno->getMatricula()<<endl;
+					cout<<"Nome: "<<pAluno->getNome();
+					cout<<endl;
+					delete pAluno;
+				}	
 				else
+				{
 					cout<<"Aluno não encontrado"<<endl;
+				}	
 				break;
 				pAluno=NULL;
+
 			case 3://Atualizar Aluno
 				break;
 			case 4://Deletar Aluno
@@ -123,5 +133,6 @@ int main()
 		}
 		opcao=menu();
 	}
+	
 	return 0;
 }
